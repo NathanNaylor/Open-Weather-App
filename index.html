@@ -4,17 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Weather Dashboard</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 </head>
 
 <body>
+    <div class="container-fluid-nav text-center">
+        <nav class="navbar navbar-dark bg-dark ">
+            <h1 style="color: white;">Weather Dashboard</h1>
+        </nav>
+    </div>
 
     <div class="container">
+
+
+
         <div class="row">
-            <div class="col-4">
+            <div class="col-sm-4">
                 <div class="wrapper mt-4">
                     <h3>Search for a City:</h3>
                     <input type="text" class="search-input" placeholder="City Name">
@@ -24,7 +32,7 @@
 
             </div>
 
-            <div class="col-8">
+            <div class="col-sm-8">
 
                 <div class="row">
                     <h1 id="city-name"></h1>
@@ -107,7 +115,7 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script>
         var apiKey = "fb36f051233cb31b414e197acbf4328b";
         var placeInput = "San Diego";
@@ -148,7 +156,7 @@
                 method: "GET"
             }).then(function (response) {
                 //display name of city and date in header
-                $("#city-name").text(response.name +" "+ moment().month() + "/" + moment().date() + "/" + moment().year());
+                $("#city-name").text(response.name + " " + moment().month() + "/" + moment().date() + "/" + moment().year());
                 //display current temp for city
                 $("#temperature").text("Temperature: " + ((response.main.temp - 273.15) * 9 / 5 + 32).toFixed(1) + "°F");
                 //display current Humidity for city
@@ -196,8 +204,8 @@
                     //look through response array
                     console.log(response.list[j])
                     // add info the the children of cards with matching data value
-                    $(".card-body[data-value=" + j + "]").append("<h6>"+moment().month() + "/" + moment().add(1+j, "d").date() + "/" + moment().year()+"</h6>")
-                    $(".card-body[data-value=" + j + "]").append("<img src='http://openweathermap.org/img/wn/"+ response.list[j].weather[0].icon +"@2x.png'>")
+                    $(".card-body[data-value=" + j + "]").append("<h6>" + moment().month() + "/" + moment().add(1 + j, "d").date() + "/" + moment().year() + "</h6>")
+                    $(".card-body[data-value=" + j + "]").append("<img src='http://openweathermap.org/img/wn/" + response.list[j].weather[0].icon + "@2x.png'>")
                     $(".card-body[data-value=" + j + "]").append("<h6>Temp: " + ((response.list[j].main.temp - 273.15) * 9 / 5 + 32).toFixed(1) + "°F</h6>");
                     $(".card-body[data-value=" + j + "]").append("<h6>Humidity: " + response.list[j].main.humidity + "%</h6>");
                     console.log(moment().date());

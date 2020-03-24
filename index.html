@@ -16,6 +16,7 @@
         <div class="row">
             <div class="col-4">
                 <div class="wrapper mt-4">
+                    <h3>Search for a City:</h3>
                     <input type="text" class="search-input" placeholder="City Name">
                     <button type="button" class="btn btn-info search">Search</button>
                 </div>
@@ -57,7 +58,7 @@
                 <div class="row">
 
                     <div class="card mr-4" style="width: 125px; background-color: #5bc0de;">
-                        <div class="card-body">
+                        <div class="card-body" data-value="0">
                             <h5 class="card-title" style="color: white;">Date Goes Here</h5>
                             <h6 class="card-subtitle mb-2 text-muted">Icon Goes here</h6>
                             <p class="card-text" style="color: white;">Temp: <br>
@@ -70,7 +71,7 @@
 
 
                     <div class="card mr-4" style="width: 125px; background-color: #5bc0de;">
-                        <div class="card-body">
+                        <div class="card-body" data-value="1">
                             <h5 class="card-title" style="color: white;">Date Goes Here</h5>
                             <h6 class="card-subtitle mb-2 text-muted">Icon Goes here</h6>
                             <p class="card-text" style="color: white;">Temp: <br>
@@ -83,7 +84,7 @@
 
 
                     <div class="card mr-4" style="width: 125px; background-color: #5bc0de;">
-                        <div class="card-body">
+                        <div class="card-body" data-value="2">
                             <h5 class="card-title" style="color: white;">Date Goes Here</h5>
                             <h6 class="card-subtitle mb-2 text-muted">Icon Goes here</h6>
                             <p class="card-text" style="color: white;">Temp: <br>
@@ -96,7 +97,7 @@
 
 
                     <div class="card mr-4" style="width: 125px; background-color: #5bc0de;">
-                        <div class="card-body">
+                        <div class="card-body" data-value="3">
                             <h5 class="card-title" style="color: white;">Date Goes Here</h5>
                             <h6 class="card-subtitle mb-2 text-muted">Icon Goes here</h6>
                             <p class="card-text" style="color: white;">Temp: <br>
@@ -109,7 +110,7 @@
 
 
                     <div class="card" mr41 style="width: 125px; background-color: #5bc0de;">
-                        <div class="card-body">
+                        <div class="card-body" data-value="4">
                             <h5 class="card-title" style="color: white;">Date Goes Here</h5>
                             <h6 class="card-subtitle mb-2 text-muted">Icon Goes here</h6>
                             <p class="card-text" style="color: white;">Temp: <br>
@@ -134,7 +135,7 @@
         var buttonsReturned = [];
         var buttons = [];
         var i = 0;
-        console.log(buttons);
+        
 
         $(".append-city").append("<button class='history'>" + place + "</button> <br>")
 
@@ -142,17 +143,18 @@
 
         function appendCityButton() {
 
-            placeInput = $(".search-input").val().trim();
+
             if (placeInput != "") {
                 place = placeInput;
                 if (buttons.includes(place)) {
                     return;
                 } else {
-                    $(".append-city").append("<button>" + place + "</button> <br>")
+                    $(".append-city").append("<button class='history'>" + place + "</button> <br>")
                     buttons.push(place);
                     localStorage.setItem("cities", JSON.stringify(buttons));
                 }
             } else {
+
                 return;
             }
         }
@@ -175,13 +177,13 @@
                 $("#wind-speed").text("Wind Speed: " + response.wind.speed + "MPH");
                 var longitude = response.coord.lon;
                 var latitude = response.coord.lat;
-                console.log(latitude)
+                
 
                 $.ajax({
                     url: "https://api.openweathermap.org/data/2.5/uvi?appid=" + apiKey + "&lat=" + latitude + "&lon=" + longitude,
                     method: "GET"
                 }).then(function (response) {
-                    console.log(response)
+                    
                     //display current UV Index for city
                     $("#uv-index").text("UV Index: " + response.value);
                     if (response.value <= 2) {
@@ -198,10 +200,24 @@
                 })
             });
         }
+
+        function setFiveDay() {
+            $.ajax({
+                url: "https://api.openweathermap.org/data/2.5/forecast?q=" + place + "&appid=" + apiKey,
+                method: "GET"
+            }).then(function (response) {
+                console.log(response)
+            });
+
+        }
+
+
+
+
         if (localStorage.getItem("cities") !== null) {
             buttonsReturned = localStorage.getItem("cities");
             buttons = JSON.parse(buttonsReturned);
-            console.log(buttons);
+            
             while (i < buttons.length) {
                 $(".append-city").append("<button class='history'>" + buttons[i] + "</button> <br>")
                 i++
@@ -210,13 +226,14 @@
 
         setCityInfo();
 
-        // setFiveDay();
+        setFiveDay();
 
         //checks if local storage has any data to return
 
 
         //on click grab user input for city
         $(".search").on("click", function () {
+            placeInput = $(".search-input").val().trim();
 
             //append new button below search with user input as name and save to local storage
             appendCityButton();
